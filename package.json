@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/Mayank5054/MyShop-Rest/issues"
   },
-  "homepage": "https://github.com/Mayank5054/MyShop-Rest#readme"
+  "homepage": "https://github.com/Mayank5054/MyShop-Rest#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
 }
