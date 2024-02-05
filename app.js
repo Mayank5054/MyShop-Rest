@@ -1,5 +1,6 @@
 const express=require("express");
 const feedRoutes = require("./routes/feed");
+const loginRoutes = require("./routes/login");
 const app = express();
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
@@ -14,8 +15,7 @@ app.use((req,res,next) => {
 })
 
 app.use("/feed",feedRoutes);
-
-
+app.use(loginRoutes);
 
 mongoConnectFunction()
 .then(result => {
