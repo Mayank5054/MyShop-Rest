@@ -1,8 +1,22 @@
+const Product = require("../models/Product");
+
 exports.getPosts = (req,res,next) =>{
     console.log("get posts called !");
-    res.status(200).json({
-        message:"success GET posts"
-    })
+    Product.find().then(
+        data => {
+            if(data){
+                res.status(200).json({
+                    data:data,
+                    message:"Post Fetched Suuced"
+                })
+            }
+            else{
+                res.status(400).json({
+                    message:"no post found"
+                })
+            }
+        }
+    )
 }
 
 exports.postPosts = (req,res,next) =>{

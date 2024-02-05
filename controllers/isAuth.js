@@ -3,8 +3,8 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const isAuth = (req,res,next) =>{
     let token = req.get("Authorization");
-    token = token.split(" ")[1];
     if(token){
+        token = token.split(" ")[1];
         console.log(token);
         try{
        const decoded = jwt.verify(token,"Mayank.5354");
