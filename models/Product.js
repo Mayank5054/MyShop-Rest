@@ -17,7 +17,7 @@ const productSchema=new Schema({
     ,
     userId:{
         type:Schema.ObjectId,
-        ref:"Users"
+        ref:"User"
     }
 })
 

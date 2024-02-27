@@ -1,7 +1,10 @@
 const Product = require("../models/Product");
-
+const User = require("../models/User");
+const Order = require("../models/Order");
 exports.getAllProducts = (req,res,next) => {
-    Product.find().then(
+    Product.find()
+    .populate("userId","cart")
+    .then(
         Products => { 
                res.status(201).json({
                     Products:Products,
@@ -30,12 +33,13 @@ exports.getProduct = (req,res,next) => {
 }
 
 exports.createProduct = (req,res,next) => {
+    console.log(req.user);
     console.log(req.body);
     const product  = new Product({
         title:req.body.title,
         price:req.body.price,
         image:req.body.image,
-        userId:req.body.userId
+        userId:req.user
     })
     product.save().then((result)=>{
 console.log(result);
@@ -61,6 +65,84 @@ exports.updateProduct = (req,res,next) => {
             result.save().then((ree)=>{
                 console.log(ree);
             })
+        }
+    )
+}
+
+exports.addProductToCart = (req,res,next) => {
+    Product.findById(req.body.id)
+    .then(product => {
+        if(product){
+            console.log(product);
+            // User.addToCart(product)
+
+            req.user.addToCart(product)
+            .then(result => {
+                console.log(result);
+            })
+        }
+    })
+}
+
+exports.getUserCart = (req,res,next) => {
+    req.user
+    .populate("cart.items.productId","title price -_id userId")
+    .then((products) => {
+        console.log("cart fetched");
+        console.log(products.cart.items);
+    })
+}
+
+exports.deleteCartItem = (req,res,next) => {
+    Product.findById(req.body.id)
+    .then( product => {
+        console.log(product);
+        req.user.deleteCartItem(product)
+        .then(result => {
+            console.log(result);
+        })
+    })
+}
+
+exports.placeOrder = (req,res,next) => {
+    req.user
+    .populate("cart.items.productId")
+    .then(user => {
+        let total = 0;
+        const items = user.cart.items.map(e =>{
+            console.log(e);
+            total += e.productId.price;
+            return {productId:e._id,quantity:e.quantity}
+        });
+        console.log(items , total);
+        const order = new Order({
+            items:items,
+            totalAmount:total,
+            userId:req.user
+        });
+
+        return order.save()
+    })
+    .then (result => {
+        req.user.cart.items = [];
+        console.log(result);
+        return req.user.save();
+        
+    })
+    .then((user)=>{
+        console.log("user  cart cleared");
+        console.log(user);
+    })
+};
+
+
+exports.getAllUserOrders = (req,res,next) => {
+    Order.find()
+    .where("userId")
+    .equals(req.user._id)
+    .then(
+        orders => {
+            console.log(orders);
         }
     )
 }
