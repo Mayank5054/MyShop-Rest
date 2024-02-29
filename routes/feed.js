@@ -9,13 +9,14 @@ router.get("/products",feedController2.getAllProducts);
 router.get("/products/:id",feedController2.getProduct);
 router.post("/createProduct",feedController2.createProduct);
 router.post("/updateProduct/:id",feedController2.updateProduct);
-
 router.post("/deleteProduct/:id",feedController2.deleteProduct);
 router.post("/addToCart",feedController2.addProductToCart);
 router.post("/getUserCart",feedController2.getUserCart);
 router.post("/deleteCartItem",feedController2.deleteCartItem);
 router.post("/placeOrder",feedController2.placeOrder);
 router.post("/getUserOrders",feedController2.getAllUserOrders);
+router.post("/getReset",feedController2.getResetPassword);
+router.post("/resetPassword",feedController2.changePassword);
 // POST /feed/posts
 // router.post("/posts",feedController.postPosts);
 

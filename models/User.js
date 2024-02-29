@@ -10,6 +10,12 @@ const user = new Schema({
         type:String,
         required:true
     },
+    otp:{
+        type:String
+    },
+    valid:{
+        type:Date
+    },
     cart:{
         items:[{
             productId:{

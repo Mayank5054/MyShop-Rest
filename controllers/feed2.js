@@ -1,6 +1,7 @@
 const Product = require("../models/Product");
 const User = require("../models/User");
 const Order = require("../models/Order");
+const crypto = require("crypto");
 exports.getAllProducts = (req,res,next) => {
     Product.find()
     .populate("userId","cart")
@@ -145,4 +146,48 @@ exports.getAllUserOrders = (req,res,next) => {
             console.log(orders);
         }
     )
+}
+
+exports.getResetPassword = (req,res,next) => {
+    User.findOne({email:req.body.email})
+    .then((user) => {
+        const userData = user;
+        crypto.randomBytes(32,(err,buffer)=>{
+            if(err){
+                console.log(err);
+            }
+            else{
+                const token = buffer.toString("hex");
+                userData.otp = token;
+                userData.valid = Date.now() + 120000;
+                console.log("user" , userData);
+                userData.save().then((result)=>{
+console.log(result);
+                })
+            }
+        })
+        
+})
+}
+
+exports.changePassword = (req,res,next) => {
+    User.findOne({
+        $and:[{email:req.body.email},
+        {otp:req.body.otp},{
+            valid:{
+                $gt:Date.now()
+            }
+        }]
+    })
+    .then((user)=>{
+        console.log(user);
+        // console.log(user.valid > Date.now());
+if(user && user.valid > Date.now()){
+    user.password = req.body.password;
+    return user.save();
+}
+    })
+    .then((result) => {
+        console.log(result);
+    })
 }

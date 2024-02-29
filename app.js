@@ -15,7 +15,7 @@ app.use(bodyParser.json());
 //     next();
 // })
 app.use((req,res,next)=> {
-    User.findById("65de11a32f7105bc9944a4a4")
+    User.findById("65e0c1803e97474f5fd9d9a5")
     .then( (user)=>{
         req.user = user;
         next();
@@ -40,6 +40,8 @@ mongoConnectFunction()
                     const user = new User({
                         email: "mayanksheladiya49@gmail.com",
                         password: "Mayank.5354",
+                        otp:null,
+                        valid:null,
                         cart: []
                     });
                     return user.save()
