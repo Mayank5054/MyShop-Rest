@@ -17,6 +17,8 @@ router.post("/placeOrder",feedController2.placeOrder);
 router.post("/getUserOrders",feedController2.getAllUserOrders);
 router.post("/getReset",feedController2.getResetPassword);
 router.post("/resetPassword",feedController2.changePassword);
+router.get("/form",feedController2.getForm);
+router.post("/uploadFile",feedController2.uploadFile);
 // POST /feed/posts
 // router.post("/posts",feedController.postPosts);
 

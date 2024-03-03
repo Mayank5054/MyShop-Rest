@@ -6,8 +6,31 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const mongoConnectFunction = require("./utils/mongooseConnection");
 const User = require("./models/User");
+const path = require("path");
+const multer = require("multer");
+const storageObj = multer.diskStorage({
+    destination:(req,file,cb) => {
+        cb(null,"uploads/");
+    },
+    filename:(req,file,cb) => {
+        cb(null,new Date().toISOString().replace(/:/g, '-')
+        + "-"
+        + file.originalname );
+    }
+})
 // This creates a connection to the Socket.IO server
+
+app.set("view engine","ejs");
+app.set('views', path.join(__dirname, 'views'));
+app.use("/uploads",express.static(
+    
+    path.join(__dirname,"uploads")
+    
+    ));
+app.use(bodyParser.urlencoded({extended:true}))
+app.use(multer({storage:storageObj}).single("file1"));
 app.use(bodyParser.json());
+
 // app.use((req,res,next) => {
 //     res.setHeader("Access-Control-Allow-Origin","*");
 //     res.setHeader("Access-Control-Allow-Methods","GET");

@@ -173,11 +173,7 @@ console.log(result);
 exports.changePassword = (req,res,next) => {
     User.findOne({
         $and:[{email:req.body.email},
-        {otp:req.body.otp},{
-            valid:{
-                $gt:Date.now()
-            }
-        }]
+        {otp:req.body.otp}]
     })
     .then((user)=>{
         console.log(user);
@@ -190,4 +186,17 @@ if(user && user.valid > Date.now()){
     .then((result) => {
         console.log(result);
     })
+}
+
+exports.getForm = (req,res,next) => {
+    res.render('./../views/fileUpload',{
+        title:"Hello,world"
+    })
+}
+
+exports.uploadFile = (req,res,next) => {
+console.log(req.file);
+res.render("./../views/showUploadedImage",{
+    url:req.file.path
+})
 }
